@@ -1,0 +1,37 @@
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+main section h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.table-responsive {
+  margin-top: 1rem;
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.form-control:not(:focus):invalid {
+  border-color: #EF4444;
+}
+
+.form-control:valid {
+  border-color: #16A34A;
+}
+
+.error-message {
+  color: #EF4444;
+  font-size: 0.85rem;
+}
