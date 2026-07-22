@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career — Find Work & Connect</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    
+    <div class="nav-container">
+        <header class="navbar">
+            <div class="nav-menu">
+                <a href="javascript:void(0)" class="nav-link active" id="nav-home" onclick="navigateTo('home', 'hero-top')"><span class="blue-dot">●</span> Career</a>
+                <a href="javascript:void(0)" class="nav-link" id="nav-vacancies" onclick="navigateTo('home', 'vacancies')">Vacancies</a>
+                <a href="javascript:void(0)" class="nav-link" id="nav-feed" onclick="navigateTo('feed')">Feed</a>
+                <a href="javascript:void(0)" class="nav-link" id="nav-about" onclick="navigateTo('home', 'about')">About</a>
+                <a href="javascript:void(0)" class="nav-link" id="nav-contact" onclick="navigateTo('home', 'contact')">Contact</a>
+            </div>
+            
+            <div class="nav-right-tools">
+                
+                <button class="theme-toggle-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle dark/light mode">
+                    <span id="theme-icon">🌙</span>
+                </button>
+
+                <div class="nav-auth" id="auth-buttons-container">
+                    <button class="btn-login" onclick="openModal('login-modal')">Log In</button>
+                    <button class="btn-signup" onclick="openModal('signup-modal')">Sign Up</button>
+                </div>
+            </div>
+        </header>
+    </div>
+
+    <main class="main-content-wrapper">
+
+        
+        <div id="home-view" class="spa-view active">
+            
+            <section class="hero" id="hero-top">
+                <div class="ambient-glow glow-1"></div>
+                <div class="ambient-glow glow-2"></div>
+
+                <span class="promo-badge" id="promo-count-badge">0 OPEN ROLES TODAY</span>
+                <h1 class="hero-title">Find work<br><span class="hero-gradient-text">you'll actually love.</span></h1>
+                <p class="hero-subtitle">
+                    Curated roles from teams that ship real products — remote-friendly, transparent salaries, no noise.
+                </p>
+
+                <div class="search-wrapper">
+                    <div class="search-box">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="search-input" placeholder="Search by title, skill, or company..." oninput="applyAllFilters()">
+                    </div>
+                    <div class="popular-tags">
+                        <span class="popular-label">Popular:</span>
+                        <button type="button" class="tag-chip" onclick="quickSearch('React')">React</button>
+                        <button type="button" class="tag-chip" onclick="quickSearch('Remote')">Remote</button>
+                        <button type="button" class="tag-chip" onclick="quickSearch('Design')">Design</button>
+                        <button type="button" class="tag-chip" onclick="quickSearch('San Francisco')">SF</button>
+                    </div>
+                </div>
+
+                <div class="stats-row">
+                    <div class="stat-item">
+                        <span class="stat-num" id="stat-new-roles">0</span>
+                        <span class="stat-label">New this week</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num">34</span>
+                        <span class="stat-label">Companies hiring</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-num" id="stat-salary-range">$1K–5K+</span>
+                        <span class="stat-label">Salary range</span>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section class="filters-section" id="vacancies">
+                <div class="filters-container">
+                    <div class="category-tray-wrapper">
+                        <div class="category-tray" id="category-tray">
+                            <button class="cat-pill active" data-category="All">All</button>
+                            <button class="cat-pill" data-category="IT & Dev">IT & Dev</button>
+                            <button class="cat-pill" data-category="Design">Design</button>
+                            <button class="cat-pill" data-category="Marketing">Marketing</button>
+                            <button class="cat-pill" data-category="Sales">Sales</button>
+                            <button class="cat-pill" data-category="Finance">Finance</button>
+                            <button class="cat-pill" data-category="HR">HR</button>
+                        </div>
+                    </div>
+
+                    <div class="dropdowns-tray">
+                        <div class="custom-select-wrapper" id="dropdown-loc">
+                            <button class="custom-select-trigger" onclick="toggleDropdown('dropdown-loc', event)">
+                                <span class="trigger-text">📍 <span id="label-loc">All Locations</span></span>
+                                <span class="custom-arrow">▾</span>
+                            </button>
+                            <div class="custom-select-options">
+                                <div class="custom-option active" onclick="selectOption('loc', 'All', 'All Locations')">All Locations</div>
+                                <div class="custom-option" onclick="selectOption('loc', 'Remote', 'Remote')">Remote</div>
+                                <div class="custom-option" onclick="selectOption('loc', 'San Francisco', 'San Francisco')">San Francisco</div>
+                                <div class="custom-option" onclick="selectOption('loc', 'New York', 'New York')">New York</div>
+                                <div class="custom-option" onclick="selectOption('loc', 'London', 'London')">London</div>
+                                <div class="custom-option" onclick="selectOption('loc', 'Almaty', 'Almaty')">Almaty</div>
+                            </div>
+                        </div>
+
+                        <div class="custom-select-wrapper" id="dropdown-type">
+                            <button class="custom-select-trigger" onclick="toggleDropdown('dropdown-type', event)">
+                                <span class="trigger-text">💼 <span id="label-type">Any Job Type</span></span>
+                                <span class="custom-arrow">▾</span>
+                            </button>
+                            <div class="custom-select-options">
+                                <div class="custom-option active" onclick="selectOption('type', 'Any', 'Any Job Type')">Any Job Type</div>
+                                <div class="custom-option" onclick="selectOption('type', 'Full-time', 'Full-time')">Full-time</div>
+                                <div class="custom-option" onclick="selectOption('type', 'Part-time', 'Part-time')">Part-time</div>
+                                <div class="custom-option" onclick="selectOption('type', 'Contract', 'Contract')">Contract</div>
+                            </div>
+                        </div>
+
+                        <div class="custom-select-wrapper" id="dropdown-salary">
+                            <button class="custom-select-trigger" onclick="toggleDropdown('dropdown-salary', event)">
+                                <span class="trigger-text">💵 <span id="label-salary">$1,000+ / mo</span></span>
+                                <span class="custom-arrow">▾</span>
+                            </button>
+                            <div class="custom-select-options">
+                                <div class="custom-option active" onclick="selectOption('salary', '1000', '$1,000+ / mo')">$1,000+ / mo</div>
+                                <div class="custom-option" onclick="selectOption('salary', '2000', '$2,000+ / mo')">$2,000+ / mo</div>
+                                <div class="custom-option" onclick="selectOption('salary', '3000', '$3,000+ / mo')">$3,000+ / mo</div>
+                                <div class="custom-option" onclick="selectOption('salary', '4000', '$4,000+ / mo')">$4,000+ / mo</div>
+                                <div class="custom-option" onclick="selectOption('salary', '5000', '$5,000+ / mo')">$5,000+ / mo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section class="roles-container">
+                <div class="roles-header">
+                    <h2 class="section-title">Open roles</h2>
+                    <span class="counter-text" id="roles-counter">Showing 0 of 0</span>
+                </div>
+                <div class="roles-list" id="roles-list"></div>
+            </section>
+
+            
+            <section class="info-grid-section" id="about">
+                <div class="info-grid">
+                    <div class="about-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Why Career?</h3>
+                        <p>We believe finding a job should be transparent and inspiring. No hidden requirements, no endless form fields, and no ghosting.</p>
+                        <ul class="about-highlights">
+                            <li>✨ Verified tech companies & startups</li>
+                            <li>⚡ Direct line to hiring managers</li>
+                            <li>💰 Transparent salary estimates</li>
+                        </ul>
+                    </div>
+
+                    <div class="contact-card" id="contact">
+                        <div class="card-icon">💬</div>
+                        <h3>Have questions?</h3>
+                        <p>Drop us a line and our team will get back to you within 24 hours.</p>
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                            <div class="form-inputs">
+                                <input type="text" placeholder="Your Name" required>
+                                <input type="email" placeholder="Your Email" required>
+                            </div>
+                            <textarea placeholder="Tell us how we can help..." rows="3" required></textarea>
+                            <button type="submit" class="btn-submit">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        
+        <div id="feed-view" class="spa-view">
+            <section class="feed-container">
+                <div class="feed-header-block">
+                    <h1 class="section-title">Community Feed 💬</h1>
+                    <p class="feed-subtitle">Share career updates, tech articles, or hiring announcements with the network.</p>
+                </div>
+
+               <div class="create-post-card">
+    <div class="create-post-header">
+        <div class="post-author-avatar" id="create-post-avatar">A</div>
+        <div class="post-input-wrapper" style="flex: 1;">
+            <textarea id="new-post-content" placeholder="Share an update, insights, or job opening..." rows="3"></textarea>
+            
+            
+            <div id="post-image-preview-container" class="post-preview-container" style="display: none;">
+                <img id="post-image-preview" src="" alt="Preview">
+                <button type="button" class="btn-remove-preview" onclick="removePostImage()">✕</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="create-post-actions">
+        <div class="post-attach-tools">
+            <label class="btn-attach-photo" title="Attach Photo">
+                📷 <span>Photo</span>
+                <input type="file" id="post-file-input" accept="image/*" onchange="handlePostImageSelect(event)" style="display: none;">
+            </label>
+        </div>
+        <button class="btn-publish-post" onclick="submitNewPost()">Publish Post</button>
+    </div>
+</div>
+
+                <div class="posts-stream" id="posts-stream"></div>
+            </section>
+        </div>
+
+        
+        <div id="profile-view" class="spa-view">
+            <section class="profile-container">
+                <div class="profile-card">
+                    <div class="profile-header-block">
+                        <div class="profile-user-info">
+                            <div class="profile-avatar-wrapper">
+                                <div class="avatar-placeholder" id="avatar-placeholder">A</div>
+                                <img src="" alt="Avatar" id="profile-user-avatar" style="display: none;">
+                                <label for="avatar-file-input" class="avatar-upload-overlay" title="Upload new photo">
+                                    <span>📷</span>
+                                </label>
+                                <input type="file" id="avatar-file-input" accept="image/*" onchange="handleAvatarUpload(event)" style="display: none;">
+                            </div>
+                            <div class="profile-title-details">
+                                <h1 class="profile-name" id="profile-name-display">ABYLAI B</h1>
+                                <p class="profile-subtitle-text"><span id="profile-role-display">Frontend Developer</span> • <span id="profile-loc-display">Almaty, KZ</span></p>
+                            </div>
+                        </div>
+                        <button class="btn-edit-profile" onclick="openEditProfile()">Edit Profile</button>
+                    </div>
+
+                    <div class="profile-section-block">
+                        <h3 class="profile-section-title">About</h3>
+                        <p class="profile-about-text" id="profile-about-display">Passionate developer building high-quality web products.</p>
+                    </div>
+
+                    <div class="profile-section-block">
+                        <h3 class="profile-section-title">Skills</h3>
+                        <div class="skills-tags-container">
+                            <span class="skill-tag">JavaScript</span>
+                            <span class="skill-tag">React</span>
+                            <span class="skill-tag">Python</span>
+                            <span class="skill-tag">Flask</span>
+                            <span class="skill-tag">SQLite</span>
+                        </div>
+                    </div>
+
+                    <div class="profile-section-block">
+                        <h3 class="profile-section-title">Resume</h3>
+                        <div class="resume-download-card">
+                            <div class="resume-file-info">
+                                <div class="file-icon-box">📄</div>
+                                <div class="file-text-details">
+                                    <h4 class="file-name" id="resume-filename-display">Abylai_B_Resume.pdf</h4>
+                                    <p class="file-meta">Updated: July 2026 • 28 KB</p>
+                                </div>
+                            </div>
+                            <button class="btn-download-resume" onclick="triggerResumeDownload()">Download Resume</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    
+    <footer class="main-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3 class="footer-logo">💼 Career</h3>
+                <p>Connecting candidates and companies with modern hiring tools.</p>
+            </div>
+            <div class="footer-links-col">
+                <h4>Navigation</h4>
+                <a href="javascript:void(0)" onclick="navigateTo('home', 'hero-top')">Home</a>
+                <a href="javascript:void(0)" onclick="navigateTo('home', 'vacancies')">Vacancies</a>
+                <a href="javascript:void(0)" onclick="navigateTo('feed')">Community Feed</a>
+                <a href="javascript:void(0)" onclick="navigateTo('home', 'about')">About Us</a>
+                <a href="javascript:void(0)" onclick="navigateTo('home', 'contact')">Contact Support</a>
+            </div>
+            <div class="footer-social-col">
+                <h4>Follow us</h4>
+                <div class="social-links">
+                    <a href="javascript:void(0)" class="social-icon" onclick="showToast('Twitter / X: @career_platform')">𝕏</a>
+                    <a href="javascript:void(0)" class="social-icon" onclick="showToast('LinkedIn: /company/career')">in</a>
+                    <a href="javascript:void(0)" class="social-icon" onclick="showToast('GitHub: /career-jobs')">gh</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Welcome back</h2>
+            <p class="modal-desc">Log in to your account</p>
+            <div id="login-error" class="error-msg"></div>
+            <form onsubmit="handleLogin(event)">
+                <input type="email" id="login-email" placeholder="Email Address" required class="modal-input">
+                <input type="password" id="login-pass" placeholder="Password" required class="modal-input">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('login-modal')">Cancel</button>
+                    <button type="submit" class="btn-submit-modal">Log In</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="signup-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Create an account</h2>
+            <p class="modal-desc">Join to start applying for jobs</p>
+            <div id="signup-error" class="error-msg"></div>
+            <form onsubmit="handleSignup(event)">
+                <input type="text" id="signup-name" placeholder="Full Name" required class="modal-input">
+                <input type="email" id="signup-email" placeholder="Email Address" required class="modal-input">
+                <input type="password" id="signup-pass" placeholder="Password (min. 6 chars)" required class="modal-input">
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('signup-modal')">Cancel</button>
+                    <button type="submit" class="btn-submit-modal">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-profile-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Edit Profile</h2>
+            <p class="modal-desc">Update your profile information and avatar</p>
+            <div id="edit-error" class="error-msg"></div>
+            <form onsubmit="saveProfileChanges(event)">
+                <div class="modal-avatar-uploader">
+                    <div class="modal-avatar-preview-box">
+                        <img id="edit-avatar-preview" src="" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                        <span id="edit-avatar-placeholder">A</span>
+                    </div>
+                    <label class="btn-change-photo">
+                        Upload Avatar
+                        <input type="file" id="edit-avatar-input" accept="image/*" onchange="handleModalAvatarChange(event)" style="display: none;">
+                    </label>
+                </div>
+
+                <input type="text" id="edit-name" placeholder="Full Name" required class="modal-input">
+                <input type="text" id="edit-role" placeholder="Role (e.g. Frontend Developer)" required class="modal-input">
+                <input type="text" id="edit-location" placeholder="Location (e.g. Almaty, KZ)" required class="modal-input">
+                <textarea id="edit-about" placeholder="About you..." rows="3" required class="modal-input" style="font-family: inherit; resize: none;"></textarea>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('edit-profile-modal')">Cancel</button>
+                    <button type="submit" class="btn-submit-modal">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
